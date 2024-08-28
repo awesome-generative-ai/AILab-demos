@@ -5,7 +5,7 @@ from constants import client
 from ai21.models import Penalty
 
 st.set_page_config(
-    page_title="Product Description Generator",
+    page_title="产品描述生成器",
 )
 
 
@@ -51,17 +51,17 @@ def query(prompt):
 if __name__ == '__main__':
 
     apply_studio_style()
-    st.title("Product Description Generator")
-    st.markdown("###### Create valuable marketing copy for product pages that describes your product and its benefits within seconds! Simply choose a fashion accessory, a few key features, and let our tool work its magic.")
+    st.title("产品描述生成器")
+    st.markdown("###### 几秒钟内为您的产品页面创建有价值的营销文案，描述您的产品及其优势！只需选择一个时尚配饰，几个关键特性，让我们的工具发挥魔力。")
 
-    product_input = st.text_input("Enter the name of your product:", value="Talking Picture Oxford Flat")
-    features = st.text_area("List your product features here:", value="- Flat shoes\n- Amazing chestnut color\n- Man made materials")
+    product_input = st.text_input("输入您的产品名称：", value="会说话的牛津平底鞋")
+    features = st.text_area("在这里列出您的产品特性：", value="- 平底鞋\n- 惊人的栗色\n- 人造材料")
 
-    prompt = PRODUCT_DESCRIPTION_FEW_SHOT + f"Product: {product_input}\nFeatures:\n{features}\nDescription:"
+    prompt = PRODUCT_DESCRIPTION_FEW_SHOT + f"产品：{product_input}\n特性：\n{features}\n描述："
 
-    if st.button(label="Generate Description"):
+    if st.button(label="生成描述"):
         st.session_state["short-form-save_results_ind"] = []
-        with st.spinner("Loading..."):
+        with st.spinner("加载中..."):
             st.session_state["short-form-result"] = {
                 "completion": query(prompt),
             }
@@ -69,4 +69,4 @@ if __name__ == '__main__':
     if "short-form-result" in st.session_state:
         result = st.session_state["short-form-result"]["completion"]
         st.text("")
-        st.text_area("Generated Product Description", result, height=200)
+        st.text_area("生成的产品描述", result, height=200)

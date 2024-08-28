@@ -6,7 +6,7 @@ from constants import client
 
 
 st.set_page_config(
-    page_title="Topic Classifier",
+    page_title="主题分类器",
 )
 
 
@@ -26,19 +26,19 @@ def query(prompt):
 if __name__ == '__main__':
 
     apply_studio_style()
-    st.title("Topic Classifier")
-    st.write("Read any interesting news lately? Let's see if our topic classifier can skim through it and identify whether its category is sports, business, world news, or science and technology.")
+    st.title("主题分类器")
+    st.write("最近阅读了什么有趣的新闻吗？让我们看看我们的主题分类器是否能快速浏览它，并识别它的类别是体育、商业、世界新闻还是科学技术。")
     st.session_state['classification_model'] = DEFAULT_MODEL
 
     st.text(CLASSIFICATION_PROMPT)
-    classification_title = st.text_input(label="Title:", value=CLASSIFICATION_TITLE)
-    classification_description = st.text_area(label="Description:", value=CLASSIFICATION_DESCRIPTION, height=100)
+    classification_title = st.text_input(label="标题：", value=CLASSIFICATION_TITLE)
+    classification_description = st.text_area(label="描述：", value=CLASSIFICATION_DESCRIPTION, height=100)
 
-    if st.button(label="Classify"):
-        with st.spinner("Loading..."):
-            classification_prompt = f"{CLASSIFICATION_PROMPT}\nTitle:\n{classification_title}" \
-                                    f"Description:\n{classification_description}The topic of this article is:\n"
+    if st.button(label="分类"):
+        with st.spinner("加载中..."):
+            classification_prompt = f"{CLASSIFICATION_PROMPT}\n标题：\n{classification_title}" \
+                                    f"描述：\n{classification_description}这篇文章的主题是：\n"
             st.session_state["classification_result"] = query(CLASSIFICATION_FEWSHOT + classification_prompt)
 
     if "classification_result" in st.session_state:
-        st.subheader(f"Topic: {st.session_state['classification_result']}")
+        st.subheader(f"主题：{st.session_state['classification_result']}")

@@ -5,9 +5,9 @@ from constants import client
 
 
 def create_prompt(media, article):
-    post_type = "tweet" if media == "Twitter" else "Linkedin post"
-    instruction = f"Write a {post_type} touting the following press release."
-    return f"{instruction}\nArticle:\n{article}\n\n{post_type}:\n"
+    post_type = "tweet" if media == "Twitter" else "领英帖子"
+    instruction = f"撰写一条{post_type}，宣传以下新闻稿。"
+    return f"{instruction}\n文章：\n{article}\n\n{post_type}:\n"
 
 
 def generate(article, media, max_retries=2, top=3):
@@ -50,7 +50,7 @@ def toolbar():
 
 
 def extract():
-    with st.spinner("Summarizing article..."):
+    with st.spinner("文章总结中..."):
         try:
             st.session_state['article'] = client.summarize.create(source=st.session_state['url'], source_type='URL').summary
         except:
@@ -58,42 +58,42 @@ def extract():
 
 
 def compose():
-    with st.spinner("Generating post..."):
+    with st.spinner("生成帖子中..."):
         st.session_state["completions"] = generate(st.session_state['article'], media=st.session_state['media'])
         st.session_state['index'] = 0
 
 
 if __name__ == '__main__':
     apply_studio_style()
-    st.title("Social Media Generator")
+    st.title("社交媒体内容生成器")
 
-    st.session_state['url'] = st.text_input(label="Enter your article URL",
-                                            value=st.session_state.get('url', 'https://www.ai21.com/blog/announcing-ai21-studio-and-jurassic-1')).strip()
+    st.session_state['url'] = st.text_input(label="输入你的文章 URL",
+                                            value=st.session_state.get('url', 'https://www.5loi.com/blog/technology-strategy-thoughts')).strip()
 
-    if st.button(label='Summarize'):
+    if st.button(label='摘要'):
         extract()
 
     if 'article' in st.session_state:
         if not st.session_state['article']:
-            st.write("This article is not supported, please try another one")
+            st.write("这篇文章不支持，请尝试另一个")
 
         else:
             st.text_area(label='Summary', value=st.session_state['article'], height=200)
 
             st.session_state['media'] = st.radio(
-                "Compose a post for this article for 👉",
+                "为这篇文章撰写帖子 👉",
                 options=['Twitter', 'Linkedin'],
                 horizontal=True
             )
 
-            st.button(label="Compose", on_click=lambda: compose())
+            st.button(label="撰写", on_click=lambda: compose())
 
     if 'completions' in st.session_state:
         if len(st.session_state['completions']) == 0:
-            st.write("Please try again 😔")
+            st.write("请再试一次 😔")
 
         else:
             curr_text = st.session_state['completions'][st.session_state['index']]
-            st.text_area(label="Your awesome generated post", value=curr_text.strip(), height=200)
+            st.text_area(label="你生成的绝妙帖子", value=curr_text.strip(), height=200)
             if len(st.session_state['completions']) > 1:
                 toolbar()

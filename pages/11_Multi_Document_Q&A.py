@@ -25,7 +25,7 @@ def write_to_library(segmented_text, file_name):
 
 def parse_file(user_file):
     file_type = user_file.type
-    with st.spinner("File is being processed..."):
+    with st.spinner("文档正在处理中..."):
         if file_type == "text/plain":
             all_text = str(user_file.read(), "utf-8", errors='ignore')
         else:
@@ -46,14 +46,14 @@ def upload_file(file_path_p):
     return file_id_p
 
 
-st.set_page_config(page_title="Multi-Document Q&A")
+st.set_page_config(page_title="多文档问答系统")
 
 if __name__ == '__main__':
     apply_studio_style()
-    st.title("Multi-Document Q&A")
-    st.markdown("**Upload documents**")
+    st.title("多文档问答系统")
+    st.markdown("**上传文档**")
     
-    uploaded_files = st.file_uploader("choose .pdf/.txt file ",
+    uploaded_files = st.file_uploader("选择 .pdf/.txt 文件 ",
                                       accept_multiple_files=True,
                                       type=["pdf", "text", "txt"],
                                       key="a")
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         file_id_list.append(file_id)
         file_path_list.append(file_path)
 
-    if st.button("Remove file"):
+    if st.button("删除文件"):
         for file in file_path_list:
             try:
                 os.remove(file)
@@ -76,21 +76,21 @@ if __name__ == '__main__':
         except UnprocessableEntity:
             pass
         # for file in file_id_list:
-        #     with st.spinner("Loading..."):
+        #     with st.spinner("加载中..."):
         #         try:
         #             client.library.files.delete(file)
         #         except:
         #             continue
 
-        st.write("files removed successfully")
+        st.write("文件已成功删除")
 
-    st.markdown("**Ask a question about the uploaded document, and here is the answer:**")
+    st.markdown("**针对上传的文档提问，以下是答案：**")
 
     question = st.chat_input(DOC_QA)
     if question:
         response = client.library.answer.create(question=question, label=label)
         if response.answer is None:
-            st.write("The answer is not in the documents")
+            st.write("答案不在文档中")
         else:
             st.write(response.answer)
         

@@ -7,3 +7,4 @@
 file/
 __pycache__/
 .devcontainer/
+/.venv

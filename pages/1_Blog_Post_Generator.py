@@ -9,7 +9,7 @@ from utils.completion import paraphrase_req
 from constants import client
 
 st.set_page_config(
-    page_title="Blog Post Generator",
+    page_title="博客文章生成器",
 )
 
 
@@ -29,12 +29,12 @@ def get_args():
 
 def build_prompt(title, sections, section_heading):
     sections_text = '\n'.join(sections)
-    prompt = f"Write a descriptive section in a blog post according to the following details.\n\nBlog Title:\n{title}\n\nBlog Sections:\n{sections_text}\n\nCurrent Section Heading:\n{section_heading}\n\nCurrent Section Text:\n"
+    prompt = f"根据以下细节编写博客文章的描述性部分。\n\n博客标题：\n{title}\n\n博客内容：\n{sections_text}\n\n当前部分标题：\n{section_heading}\n\n当前部分文本："
     return prompt
 
 
 def generate_sections_content(num_results, sections, title):
-
+    
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
 
@@ -67,7 +67,7 @@ def generate_outline(title):
 
 
 def _generate_outline(title):
-    prompt = f"Write sections to a great blog post for the following title.\nBlog title: How to start a personal blog \nBlog sections:\n1. Pick a personal blog template\n2. Develop your brand\n3. Choose a hosting plan and domain name\n4. Create a content calendar \n5. Optimize your content for SEO\n6. Build an email list\n7. Get the word out\n\n##\n\nWrite sections to a great blog post for the following title.\nBlog title: A real-world example on Improving JavaScript performance\nBlog sections:\n1. Why I needed to Improve my JavaScript performance\n2. Three common ways to find performance issues in Javascript\n3. How I found the JavaScript performance issue using console.time\n4. How does lodash cloneDeep work?\n5. What is the alternative to lodash cloneDeep?\n6. Conclusion\n\n##\n\nWrite sections to a great blog post for the following title.\nBlog title: Is a Happy Life Different from a Meaningful One?\nBlog sections:\n1. Five differences between a happy life and a meaningful one\n2. What is happiness, anyway?\n3. Is the happiness without pleasure?\n4. Can you have it all?\n\n##\n\nWrite sections to a great blog post for the following title.\nBlog title: {title}\nBlog Sections:\n"
+    prompt = f"为以下标题编写博客文章的各个部分。\n博客标题：如何开始个人博客 \n博客内容：\n1. 选择个人博客模板\n2. 打造你的品牌\n3. 选择托管计划和域名\n4. 创建内容日历 \n5. 优化你的内容以适应搜索引擎优化\n6. 建立电子邮件列表\n7. 传播消息\n\n##\n\n为以下标题编写博客文章的各个部分。\n博客标题：提高JavaScript性能的现实世界示例\n博客内容：\n1. 我为什么需要提高我的JavaScript性能\n2. 寻找JavaScript性能问题的三种常见方法\n3. 我是如何使用console.time找到JavaScript性能问题的\n4. lodash.cloneDeep是如何工作的？\n5. lodash.cloneDeep的替代品是什么？\n6. 结论\n\n##\n\n为以下标题编写博客文章的各个部分。\n博客标题：幸福生活与有意义的生活有何不同？\n博客内容：\n1. 幸福生活与有意义的生活的五个不同点\n2. 幸福到底是什么？\n3. 没有愉悦的幸福吗？\n4. 你可以拥有一切吗？\n\n##\n\n为以下标题编写博客文章的各个部分。\n博客标题：{title}\n博客内容："
 
     res = client.completion.create(
         model=DEFAULT_MODEL,
@@ -124,16 +124,16 @@ def get_event_loop(title, sections, num_results):
         st.session_state['generated_sections_data'][s] = {}
         st.session_state['show_paraphrase'][s] = False
 
-    # perform request, actually generate sections
+    # 执行请求，实际生成部分
     results = generate_sections_content(num_results, sections, title)
 
-    # moved these lines here to detach st code from logic
+    # 将这些行移动到这里，以将st代码与逻辑分离
     for i, s in enumerate(sections):
         response_json = results[i]
-        section_completions = response_json["completions"]  # gets the generated candidates of the current completion
+        section_completions = response_json["completions"]  # 获取当前完成的生成候选项
         st.session_state['generated_sections_data'][s]["completions"] = section_completions
 
-    # rank/filter
+    # 排名/过滤
     for i, s in enumerate(sections):
         response_json = results[i]
         section_completions = response_json["completions"]
@@ -232,7 +232,7 @@ if __name__ == '__main__':
     apply_studio_style()
     num_results = args.num_results
 
-    # Initialization
+    # 初始化
     if 'show_outline' not in st.session_state:
         st.session_state['show_outline'] = False
 
@@ -245,25 +245,25 @@ if __name__ == '__main__':
     if 'generated_sections_data' not in st.session_state:
         st.session_state['generated_sections_data'] = {}
 
-    st.title("Blog Post Generator")
-    st.markdown("Using only a title, you can instantly generate an entire article with the click of a button! Simply select your topic and this tool will create an engaging article from beginning to end.")
-    st.markdown("#### Blog Title")
-    title = st.text_input(label="Write the title of your article here:", placeholder="",
-                          value="5 Strategies to overcome writer's block").strip()
-    st.markdown("#### Blog Outline")
-    st.text("Click the button to generate the blog outline")
-    st.button(label="Generate Outline", on_click=build_generate_outline(title))
+    st.title("博客文章生成器")
+    st.markdown("只需一个标题，您就可以立即生成整篇文章！只需选择您的主题，这个工具将为您从头到尾创建一篇引人入胜的文章。")
+    st.markdown("#### 博客标题")
+    title = st.text_input(label="在这里写下您文章的标题：", placeholder="",
+                        value="5种克服写作障碍的策略").strip()
+    st.markdown("#### 博客大纲")
+    st.text("点击按钮生成博客大纲")
+    st.button(label="生成大纲", on_click=build_generate_outline(title))
 
     sections = []
     if st.session_state['show_outline']:
         text_area_outline = st.text_area(label=" ", height=250, value=st.session_state["outline"],
                                          on_change=on_outline_change)
         sections = text_area_outline.split("\n")
-        st.text("Unsatisfied with the generated outline? Click the 'Generate Outline' button again to re-generate it, or edit it inline.")
+        st.text("对生成的大纲不满意？再次点击'生成大纲'按钮重新生成它，或在线编辑它。")
 
-        st.markdown("#### Blog Sections")
-        st.text("Click the button to effortlessly generate an outline for your blog post:")
-        st.button(label="Generate Sections", on_click=build_event_loop(title, sections, num_results))
+        st.markdown("#### 博客内容")
+        st.text("点击按钮轻松为您的博客文章生成大纲：")
+        st.button(label="生成部分", on_click=build_event_loop(title, sections, num_results))
 
     if st.session_state['show_sections']:
         st.markdown(f"**{title}**")
@@ -288,11 +288,11 @@ if __name__ == '__main__':
                 [0.2, 0.2, 0.06, 0.047, 0.05, 0.4])
 
             with col1:
-                st.button("Generate Again", on_click=build_event_loop_one_section(title, s, num_results),
+                st.button("重新生成", on_click=build_event_loop_one_section(title, s, num_results),
                           key="generate-again-" + s)
 
             with col2:
-                st.button("Paraphrase", on_click=build_paraphrase(s, tone="general", times=1),
+                st.button("释义", on_click=build_paraphrase(s, tone="general", times=1),
                           key="paraphrase-button-" + s)
 
             with col3:

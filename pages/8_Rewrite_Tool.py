@@ -4,7 +4,7 @@ from constants import client
 from ai21.models import ParaphraseStyleType
 
 st.set_page_config(
-    page_title="Rewrite Tool",
+    page_title="改写工具",
 )
 
 
@@ -35,21 +35,21 @@ def show_prev(cycle_length):
 if __name__ == '__main__':
     apply_studio_style()
 
-    st.title("Rewrite Tool")
-    st.write("Rephrase with ease! Find fresh new ways to reword your sentences with an AI writing companion that paraphrases & rewrites any text. Select rewrite suggestions that clearly convey your ideas with a range of different tones to choose from.")
-    text = st.text_area(label="Write your text here to see what the rewrite tool can do:",
+    st.title("改写工具")
+    st.write("轻松改写！使用这个AI写作伴侣，为您的句子找到全新的表述方式，它能够释义和重写任何文本。选择能够清晰传达您想法的改写建议，有多种不同的语调可供选择。")
+    text = st.text_area(label="在这里写下您的文本，看看改写工具能做什么：",
                         max_chars=500,
-                        placeholder="AI21 Studio is a platform that provides developers and businesses with top-tier natural language processing (NLP) solutions, powered by AI21 Labs’ state-of-the-art language models.",
-                        value="AI21 Studio is a platform that provides developers and businesses with top-tier natural language processing (NLP) solutions, powered by AI21 Labs’ state-of-the-art language models.").strip()
+                        placeholder="5Loi AILab 是一个为开发者和企业提供顶级自然语言处理（NLP）解决方案的平台，由 AI21 Labs 的尖端语言模型驱动。",
+                        value="5Loi AILab 是一个为开发者和企业提供顶级自然语言处理（NLP）解决方案的平台，由 AI21 Labs 的尖端语言模型驱动。").strip()
 
     intent = st.radio(
-        "Set your tone 👉",
+        "设置您的语调 👉",
         key="intent",
         options=["general", "formal", "casual", "long", "short"],
         horizontal=True
     )
 
-    st.button(label="Rewrite ✍️", on_click=lambda: get_suggestions(text, intent=intent))
+    st.button(label="改写 ✍️", on_click=lambda: get_suggestions(text, intent=intent))
     if "rewrite_rewritten_texts" in st.session_state:
         suggestions = st.session_state["rewrite_rewritten_texts"]
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
         if "rewrite_curr_index" not in st.session_state:
             st.session_state["rewrite_curr_index"] = 0
         curr_index = st.session_state["rewrite_curr_index"]
-        ph.text_area(label="Suggestions", value=suggestions[curr_index])
+        ph.text_area(label="建议", value=suggestions[curr_index])
 
         col1, col2, col3, *_ = st.columns([1, 1, 1, 10])
         with col1:

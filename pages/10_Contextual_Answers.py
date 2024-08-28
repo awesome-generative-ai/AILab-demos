@@ -4,7 +4,7 @@ from utils.studio_style import apply_studio_style
 from constants import OBQA_CONTEXT, OBQA_QUESTION, client
 
 st.set_page_config(
-    page_title="Answers",
+    page_title="上下文相关回答",
 )
 
 max_tokens = 2048 - 200
@@ -13,18 +13,18 @@ max_tokens = 2048 - 200
 if __name__ == '__main__':
 
     apply_studio_style()
-    st.title("Contextual Answers")
+    st.title("上下文相关回答")
 
-    st.write("Ask a question on a given context.")
+    st.write("在给定的上下文中提出问题。")
 
-    context = st.text_area(label="Context:", value=OBQA_CONTEXT, height=300)
-    question = st.text_input(label="Question:", value=OBQA_QUESTION)
+    context = st.text_area(label="上下文：", value=OBQA_CONTEXT, height=300)
+    question = st.text_input(label="问题：", value=OBQA_QUESTION)
 
-    if st.button(label="Answer"):
-        with st.spinner("Loading..."):
+    if st.button(label="回答"):
+        with st.spinner("加载中..."):
             num_tokens = tokenize(context + question)
             if num_tokens > max_tokens:
-                st.write("Text is too long. Input is limited up to 2048 tokens. Try using a shorter text.")
+                st.write("文本太长。输入限制为2048个令牌以内。请尝试使用更短的文本。")
                 if 'answer' in st.session_state:
                     del st.session_state['completions']
             else:

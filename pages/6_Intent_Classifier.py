@@ -10,7 +10,7 @@ import re
 OTHER_THRESHOLD = 0.2
 
 st.set_page_config(
-    page_title="Intent Classifier",
+    page_title="意图分类器",
 )
 
 
@@ -34,17 +34,17 @@ def batch_responses(prompts, delay=0.25):
 
 if __name__ == "__main__":
     apply_studio_style()
-    st.title("Intent Classifier")
-    instruction = "Classify the following question into one of the following classes:"
+    st.title("意图分类器")
+    instruction = "将以下问题分类为以下类别之一："
     st.write(instruction)
 
-    st.session_state['classes'] = st.text_area(label='Classes', value="Parking\nFood/Restaurants\nRoom Facilities\nSpa\nTransport", height=180)
+    st.session_state['classes'] = st.text_area(label='类别', value="停车\n餐饮/餐馆\n房间设施\n水疗\n交通", height=180)
     st.session_state['classes'] = re.sub('\n+', '\n', st.session_state['classes'])
 
-    st.session_state['question'] = st.text_input(label="Question", value="How to get from the airport?")
+    st.session_state['question'] = st.text_input(label="问题", value="从机场怎么走？")
 
-    if st.button('Classify'):
-        prompt = f"{instruction}\n{st.session_state['classes']}\n\nQuestion:\n{st.session_state['question']}\n\nClass:\n"
+    if st.button('分类'):
+        prompt = f"{instruction}\n{st.session_state['classes']}\n\n问题：\n{st.session_state['question']}\n\nClass:\n"
         num_tokens = tokenize(prompt)
         responses = batch_responses([prompt + c for c in st.session_state['classes'].split('\n')])
         results = {}

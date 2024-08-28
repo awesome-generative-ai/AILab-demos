@@ -14,4 +14,4 @@ def apply_studio_style():
         unsafe_allow_html=True,
     )
 
-    st.image("./assets/studio_logo.png")
+    st.image("./assets/ailab_logo.png")
